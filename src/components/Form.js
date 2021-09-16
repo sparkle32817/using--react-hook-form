@@ -1,32 +1,41 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
 import Checkbox from "./checkbox";
 import Input from "./input";
 
 function Form() {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .required("Email is required")
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@\\"]+(\.[^<>()[\]\\.,;:\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\]\\.,;:\s@\\"]+\.)+[^<>()[\]\\.,;:\s@\\"]{2,})$/i,
+        "Email is invalid",
+      )
+      .min(10, "Email must be at least 10 characters")
+      .max(20, "Email must be at most 20 characters"),
+    checkbox: Yup.string().required("This field is required"),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm(formOptions);
 
   const onSubmit = (data) => console.log(data);
-
-  console.log({ errors });
 
   return (
     <div className="app-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <input
-            name="name"
-            {...register("name", { required: "Name is required" })}
-          />
-        </div>
-        <div>
-          <input {...register("exampleRequired", { required: true })} />
-          {errors.exampleRequired && <span>This field is required</span>}
+          <input name="name" {...register("name")} />
+          <span>{errors.name?.message}</span>
         </div>
         <Controller
           name="email"
@@ -35,7 +44,6 @@ function Form() {
             field: { onChange, value, ref },
             fieldState: { error },
           }) => {
-            console.log({ error });
             return (
               <Input
                 ref={ref}
@@ -44,22 +52,6 @@ function Form() {
                 onChange={onChange}
               />
             );
-          }}
-          rules={{
-            required: "Email field is required",
-            pattern: {
-              value:
-                /^(([^<>()[\]\\.,;:\s@\\"]+(\.[^<>()[\]\\.,;:\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\]\\.,;:\s@\\"]+\.)+[^<>()[\]\\.,;:\s@\\"]{2,})$/i,
-              message: "Invalid Email",
-            },
-            minLength: {
-              value: 10,
-              message: "Input length is more than 10 letters",
-            },
-            maxLength: {
-              value: 20,
-              message: "Input length is less than 20 letters",
-            },
           }}
         />
         <Controller
@@ -75,7 +67,6 @@ function Form() {
               />
             );
           }}
-          rules={{ required: true }}
         />
 
         <button type="submit">Submit</button>
