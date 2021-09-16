@@ -12,7 +12,7 @@ const Input = (props) => {
   return (
     <div className="custom-input">
       <input name={name} type={type} value={value} onChange={handleChange} />
-      {error && <span className="error">This field is required</span>}
+      {error && <span className="error">{error.message}</span>}
     </div>
   );
 };

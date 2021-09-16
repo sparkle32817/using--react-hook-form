@@ -29,7 +29,7 @@ function Form() {
           {errors.exampleRequired && <span>This field is required</span>}
         </div>
         <Controller
-          name="test"
+          name="email"
           control={control}
           render={({
             field: { onChange, value, ref },
@@ -45,13 +45,27 @@ function Form() {
               />
             );
           }}
-          rules={{ required: true }}
+          rules={{
+            required: "Email field is required",
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@\\"]+(\.[^<>()[\]\\.,;:\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\]\\.,;:\s@\\"]+\.)+[^<>()[\]\\.,;:\s@\\"]{2,})$/i,
+              message: "Invalid Email",
+            },
+            minLength: {
+              value: 10,
+              message: "Input length is more than 10 letters",
+            },
+            maxLength: {
+              value: 20,
+              message: "Input length is less than 20 letters",
+            },
+          }}
         />
         <Controller
           name="checkbox"
           control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) => {
-            console.log({ error });
             return (
               <Checkbox
                 label="This is test checkbox"
