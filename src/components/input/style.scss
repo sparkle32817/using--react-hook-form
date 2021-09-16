@@ -1,0 +1,16 @@
+.custom-input {
+  background-color: black;
+  display         : inline-block;
+  padding         : 5px;
+  width           : 100%;
+
+  input {
+    border: 1px solid red;
+    color : blue
+  }
+
+  .error {
+    font-size: 12px;
+    color    : red;
+  }
+}

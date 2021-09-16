@@ -1,0 +1,22 @@
+.custom-checkbox {
+  &>&--content {
+    display: flex;
+
+    .checkbox {
+      width : 20px;
+      height: 20px;
+      border: 1px solid black;
+    }
+
+    .label {
+      font-size: 16px;
+      color    : blue;
+    }
+  }
+
+  &>&--error {
+    font-size: 12px;
+    color    : red;
+  }
+
+}
